@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Minimal Login Page</title>
+<title>Login | YourSite</title>
 
 <style>
   * {
@@ -39,54 +39,29 @@
     letter-spacing: 1px;
   }
 
-  .input-group {
-    position: relative;
-    margin-bottom: 20px;
-  }
-
-  .input-group img {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 20px;
-    opacity: 0.6;
-  }
-
-  .input-group input {
-    width: 100%;
-    padding: 10px 10px 10px 40px;
-    background: #000;
-    border: 1px solid #333;
-    border-radius: 10px;
-    color: white;
-    outline: none;
-    transition: 0.3s;
-  }
-
-  .input-group input:focus {
-    border-color: #fff;
-  }
-
   button {
     width: 100%;
     padding: 10px;
-    background: #fff;
-    color: #000;
-    border: none;
+    margin-top: 10px;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: 0.3s;
+  }
+
+  .login-btn {
+    background: #fff;
+    color: #000;
+    border: none;
     box-shadow: 0 5px 15px rgba(255,255,255,0.2);
   }
 
-  button:hover {
+  .login-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(255,255,255,0.25);
   }
 
   .register-btn {
-    margin-top: 15px;
     background: transparent;
     color: #fff;
     border: 1px solid #fff;
@@ -113,25 +88,35 @@
 
 <body>
   <div class="login-container">
-    <h2>Login</h2>
-
-    <form>
-      <div class="input-group">
-        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" alt="User">
-        <input type="text" placeholder="Username" required>
-      </div>
-
-      <div class="input-group">
-        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png" alt="Password">
-        <input type="password" placeholder="Password" required>
-      </div>
-
-      <button type="submit">Sign In</button>
-    </form>
-
-    <button class="register-btn" onclick="window.location.href='register.html'">Register</button>
-
-    <div class="footer">© 2025 knowvion: register by legal copyright</div>
+    <h2>Welcome</h2>
+    <button class="login-btn" id="loginBtn">Login</button>
+    <button class="register-btn" id="registerBtn">Register</button>
+    <div class="footer">© 2025 knowvion</div>
   </div>
+
+  <!-- Include Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <script>
+    // Open Netlify Identity login modal
+    document.getElementById("loginBtn").addEventListener("click", function() {
+      netlifyIdentity.open('login');
+    });
+
+    // Open Netlify Identity signup modal
+    document.getElementById("registerBtn").addEventListener("click", function() {
+      netlifyIdentity.open('signup');
+    });
+
+    // Redirect user after successful login
+    netlifyIdentity.on('login', user => {
+      window.location.href = '/dashboard.html'; // Redirect after login
+    });
+
+    // Redirect back to login page after logout
+    netlifyIdentity.on('logout', () => {
+      window.location.href = '/';
+    });
+  </script>
 </body>
 </html>
