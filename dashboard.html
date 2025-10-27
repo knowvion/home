@@ -36,7 +36,7 @@
     padding-top: 20px;
     border-radius: 0 var(--radius) var(--radius) 0;
     transition: width 0.3s ease;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   .sidebar:hover {
@@ -52,14 +52,29 @@
     text-decoration: none;
     transition: all 0.2s ease;
     font-size: 15px;
-    white-space: nowrap;
   }
 
   .sidebar a i {
     font-size: 18px;
-    margin-right: 15px;
+    margin-right: 0;
     min-width: 25px;
     text-align: center;
+    transition: margin-right 0.3s ease;
+  }
+
+  .sidebar span {
+    opacity: 0;
+    margin-left: 0;
+    transition: opacity 0.3s ease, margin-left 0.3s ease;
+  }
+
+  .sidebar:hover a i {
+    margin-right: 10px;
+  }
+
+  .sidebar:hover span {
+    opacity: 1;
+    margin-left: 8px;
   }
 
   .sidebar a:hover {
@@ -168,17 +183,17 @@
         <div class="course">
           <i class="fa-solid fa-flask"></i>
           <h3>Course 1</h3>
-          <p>Explore the depth of concepts with practical learning.</p>
+          <p>Explore deep concepts with practical learning.</p>
         </div>
         <div class="course">
           <i class="fa-solid fa-atom"></i>
           <h3>Course 2</h3>
-          <p>Build your understanding with conceptual clarity and problem solving.</p>
+          <p>Build strong problem-solving skills and conceptual clarity.</p>
         </div>
         <div class="course">
           <i class="fa-solid fa-calculator"></i>
           <h3>Course 3</h3>
-          <p>Sharpen your mathematical thinking for real JEE-level challenges.</p>
+          <p>Sharpen your mathematical mind for JEE-level mastery.</p>
         </div>
       </div>
     </div>
