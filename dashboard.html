@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Knowvion Dashboard</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    background-color: #f7f8fa;
+    color: #222;
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== LEFT SIDEBAR ===== */
+  .sidebar {
+    width: 220px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    padding-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    transition: 0.4s;
+    z-index: 10;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 30px;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    width: 100%;
+  }
+
+  .sidebar ul li {
+    width: 100%;
+    padding: 14px 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar ul li:hover {
+    background-color: #efefef;
+  }
+
+  .sidebar ul li img {
+    width: 20px;
+  }
+
+  /* ===== MAIN DASHBOARD ===== */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 30px;
+    height: 60px;
+  }
+
+  .header-icons {
+    display: flex;
+    gap: 20px;
+  }
+
+  .header-icons img {
+    width: 25px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: 0.3s;
+  }
+
+  .header-icons img:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  /* ===== CONTENT ===== */
+  main {
+    flex: 1;
+    padding: 40px;
+  }
+
+  .welcome {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+  }
+
+  .top-courses-btn {
+    background: #000;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    transition: 0.3s;
+  }
+
+  .top-courses-btn:hover {
+    background: #222;
+    transform: translateY(-2px);
+  }
+
+  /* ===== COURSE SLABS ===== */
+  .courses {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+  }
+
+  .course-card {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.4s;
+    text-align: left;
+  }
+
+  .course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+
+  .course-card img {
+    width: 45px;
+    margin-bottom: 15px;
+  }
+
+  .course-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .course-desc {
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    color: #777;
+    border-top: 1px solid #ddd;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 60px;
+    }
+    .sidebar ul li span {
+      display: none;
+    }
+    .main {
+      margin-left: 60px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">Knowvion</div>
+    <ul>
+      <li><img src="https://cdn-icons-png.flaticon.com/512/1946/1946433.png"><span>Home</span></li>
+      <li><img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png"><span>Courses</span></li>
+      <li><img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png"><span>Profile</span></li>
+      <li><img src="https://cdn-icons-png.flaticon.com/512/3602/3602145.png"><span>Notifications</span></li>
+      <li><img src="https://cdn-icons-png.flaticon.com/512/3524/3524636.png"><span>Settings</span></li>
+      <li id="logoutBtn"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png"><span>Logout</span></li>
+    </ul>
+  </div>
+
+  <!-- MAIN SECTION -->
+  <div class="main">
+    <header>
+      <div class="header-icons">
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" id="profileBtn" alt="Profile" />
+        <img src="https://cdn-icons-png.flaticon.com/512/3602/3602145.png" alt="Notifications" />
+      </div>
+    </header>
+
+    <main>
+      <div class="welcome">Welcome to Knowvion Dashboard 👋</div>
+      <button class="top-courses-btn">Explore Our Top Courses</button>
+
+      <div class="courses">
+        <div class="course-card">
+          <img src="https://cdn-icons-png.flaticon.com/512/2721/2721267.png" alt="Course 1">
+          <div class="course-title">Course 1: Advanced Mathematics</div>
+          <div class="course-desc">Master algebra, calculus, and number theory through structured lessons and interactive tests.</div>
+        </div>
+
+        <div class="course-card">
+          <img src="https://cdn-icons-png.flaticon.com/512/2721/2721266.png" alt="Course 2">
+          <div class="course-title">Course 2: Conceptual Physics</div>
+          <div class="course-desc">Deep dive into motion, energy, and modern physics concepts explained from JEE perspective.</div>
+        </div>
+
+        <div class="course-card">
+          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Course 3">
+          <div class="course-title">Course 3: Organic Chemistry Simplified</div>
+          <div class="course-desc">Learn reaction mechanisms, logic, and memory hacks to master Organic Chemistry for JEE.</div>
+        </div>
+      </div>
+    </main>
+
+    <footer>© 2025 Knowvion. All Rights Reserved.</footer>
+  </div>
+
+  <!-- NETLIFY IDENTITY -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const user = netlifyIdentity.currentUser();
+      if (!user) {
+        alert("⚠️ Please login to access this page.");
+        window.location.href = "/";
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      netlifyIdentity.logout();
+    });
+
+    netlifyIdentity.on('logout', () => {
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>
