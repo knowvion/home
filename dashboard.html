@@ -14,18 +14,17 @@
   }
 
   body {
-    background-color: #f7f8fa;
-    color: #222;
+    background-color: #0e0e0e;
+    color: #fff;
     display: flex;
     min-height: 100vh;
-    overflow-x: hidden;
   }
 
-  /* ===== LEFT SIDEBAR ===== */
+  /* SIDEBAR */
   .sidebar {
     width: 220px;
-    background-color: #fff;
-    border-right: 1px solid #ddd;
+    background-color: #151515;
+    border-right: 1px solid #333;
     padding-top: 25px;
     display: flex;
     flex-direction: column;
@@ -34,15 +33,13 @@
     left: 0;
     top: 0;
     height: 100vh;
-    transition: 0.4s;
-    z-index: 10;
   }
 
   .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #111;
     margin-bottom: 30px;
+    color: #fff;
   }
 
   .sidebar ul {
@@ -61,15 +58,17 @@
     gap: 10px;
   }
 
-  .sidebar ul li:hover {
-    background-color: #efefef;
+  .sidebar ul li:hover,
+  .sidebar ul li.active {
+    background-color: #222;
   }
 
   .sidebar ul li img {
     width: 20px;
+    filter: invert(100%);
   }
 
-  /* ===== MAIN DASHBOARD ===== */
+  /* MAIN */
   .main {
     margin-left: 220px;
     flex: 1;
@@ -78,11 +77,11 @@
     min-height: 100vh;
   }
 
-  /* ===== HEADER ===== */
+  /* HEADER */
   header {
     width: 100%;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
+    background-color: #151515;
+    border-bottom: 1px solid #333;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -98,16 +97,18 @@
   .header-icons img {
     width: 25px;
     cursor: pointer;
-    opacity: 0.8;
+    opacity: 0.7;
     transition: 0.3s;
+    filter: invert(100%);
   }
 
+  .header-icons img.active,
   .header-icons img:hover {
     opacity: 1;
     transform: scale(1.1);
   }
 
-  /* ===== CONTENT ===== */
+  /* CONTENT */
   main {
     flex: 1;
     padding: 40px;
@@ -120,23 +121,23 @@
   }
 
   .top-courses-btn {
-    background: #000;
-    color: #fff;
+    background: #fff;
+    color: #000;
     padding: 10px 25px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
     font-weight: 600;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 10px rgba(255, 255, 255, 0.1);
     transition: 0.3s;
   }
 
   .top-courses-btn:hover {
-    background: #222;
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
   }
 
-  /* ===== COURSE SLABS ===== */
+  /* COURSE SLABS */
   .courses {
     margin-top: 40px;
     display: grid;
@@ -148,19 +149,20 @@
     background-color: #fff;
     border-radius: 15px;
     padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    color: #000;
+    box-shadow: 0 5px 15px rgba(255,255,255,0.05);
     transition: 0.4s;
-    text-align: left;
   }
 
   .course-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 20px rgba(255,255,255,0.15);
   }
 
   .course-card img {
     width: 45px;
     margin-bottom: 15px;
+    filter: invert(0%);
   }
 
   .course-title {
@@ -171,15 +173,15 @@
 
   .course-desc {
     font-size: 0.9rem;
-    color: #555;
+    color: #333;
   }
 
   footer {
     text-align: center;
     padding: 20px;
     font-size: 0.8rem;
-    color: #777;
-    border-top: 1px solid #ddd;
+    color: #aaa;
+    border-top: 1px solid #333;
   }
 
   @media (max-width: 768px) {
@@ -197,50 +199,61 @@
 </head>
 
 <body>
-
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="logo">Knowvion</div>
     <ul>
-      <li><img src="https://cdn-icons-png.flaticon.com/512/1946/1946433.png"><span>Home</span></li>
-      <li><img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png"><span>Courses</span></li>
-      <li><img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png"><span>Profile</span></li>
-      <li><img src="https://cdn-icons-png.flaticon.com/512/3602/3602145.png"><span>Notifications</span></li>
-      <li><img src="https://cdn-icons-png.flaticon.com/512/3524/3524636.png"><span>Settings</span></li>
-      <li id="logoutBtn"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png"><span>Logout</span></li>
+      <li class="active" onclick="goPage('dashboard.html')">
+        <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png"><span>Home</span>
+      </li>
+      <li onclick="goPage('courses.html')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055644.png"><span>Courses</span>
+      </li>
+      <li onclick="goPage('profile.html')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png"><span>Profile</span>
+      </li>
+      <li onclick="goPage('notifications.html')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png"><span>Notifications</span>
+      </li>
+      <li onclick="goPage('settings.html')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png"><span>Settings</span>
+      </li>
+      <li id="logoutBtn">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png"><span>Logout</span>
+      </li>
     </ul>
   </div>
 
-  <!-- MAIN SECTION -->
+  <!-- MAIN -->
   <div class="main">
     <header>
       <div class="header-icons">
-        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" id="profileBtn" alt="Profile" />
-        <img src="https://cdn-icons-png.flaticon.com/512/3602/3602145.png" alt="Notifications" />
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" id="profileBtn" title="Profile" />
+        <img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png" id="notifyBtn" title="Notifications" />
       </div>
     </header>
 
     <main>
       <div class="welcome">Welcome to Knowvion Dashboard 👋</div>
-      <button class="top-courses-btn">Explore Our Top Courses</button>
+      <button class="top-courses-btn" onclick="goPage('courses.html')">Explore Our Top Courses</button>
 
       <div class="courses">
         <div class="course-card">
-          <img src="https://cdn-icons-png.flaticon.com/512/2721/2721267.png" alt="Course 1">
+          <img src="https://cdn-icons-png.flaticon.com/512/2621/2621073.png" alt="Course 1">
           <div class="course-title">Course 1: Advanced Mathematics</div>
-          <div class="course-desc">Master algebra, calculus, and number theory through structured lessons and interactive tests.</div>
+          <div class="course-desc">Deep dive into algebra, calculus, and logic through structured JEE-oriented lessons.</div>
         </div>
 
         <div class="course-card">
-          <img src="https://cdn-icons-png.flaticon.com/512/2721/2721266.png" alt="Course 2">
+          <img src="https://cdn-icons-png.flaticon.com/512/1048/1048945.png" alt="Course 2">
           <div class="course-title">Course 2: Conceptual Physics</div>
-          <div class="course-desc">Deep dive into motion, energy, and modern physics concepts explained from JEE perspective.</div>
+          <div class="course-desc">Learn motion, energy, and electromagnetism with visual clarity and conceptual strength.</div>
         </div>
 
         <div class="course-card">
-          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Course 3">
+          <img src="https://cdn-icons-png.flaticon.com/512/2920/2920202.png" alt="Course 3">
           <div class="course-title">Course 3: Organic Chemistry Simplified</div>
-          <div class="course-desc">Learn reaction mechanisms, logic, and memory hacks to master Organic Chemistry for JEE.</div>
+          <div class="course-desc">Crack reactions logically, with mechanism-first approach and smart memory patterns.</div>
         </div>
       </div>
     </main>
@@ -259,12 +272,33 @@
       }
     });
 
+    function goPage(page) {
+      window.location.href = page;
+    }
+
+    // Logout
     document.getElementById('logoutBtn').addEventListener('click', () => {
       netlifyIdentity.logout();
     });
 
     netlifyIdentity.on('logout', () => {
       window.location.href = '/';
+    });
+
+    // Header icons
+    const profileBtn = document.getElementById('profileBtn');
+    const notifyBtn = document.getElementById('notifyBtn');
+
+    profileBtn.addEventListener('click', () => {
+      profileBtn.classList.add('active');
+      notifyBtn.classList.remove('active');
+      goPage('profile.html');
+    });
+
+    notifyBtn.addEventListener('click', () => {
+      notifyBtn.classList.add('active');
+      profileBtn.classList.remove('active');
+      goPage('notifications.html');
     });
   </script>
 </body>
