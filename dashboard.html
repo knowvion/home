@@ -188,5 +188,39 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/supertokens-auth-react/umd/supertokens-auth-react.js"></script>
+<script>
+  // Initialize SuperTokens session
+  SuperTokens.init({
+    appInfo: {
+      appName: "KnownVion",
+      apiDomain: "https://st-dev-0de5e681-b3d2-11f0-863b-bf368f3ebf48.aws.supertokens.io",
+      websiteDomain: window.location.origin
+    },
+    recipeList: [ SuperTokens.Session.init() ]
+  });
+
+  // On page load: check if user is logged in
+  (async function() {
+    try {
+      await SuperTokens.Session.getSession();
+      // Session exists -> optionally execute any dashboard setup
+      console.log("User session active, dashboard can be shown.");
+    } catch (err) {
+      // No session -> redirect to error page
+      window.location.replace('error.html');
+    }
+  })();
+
+  // Optional: if you have a logout button
+  const logoutBtn = document.getElementById('logoutBtn'); // make sure button exists
+  if(logoutBtn){
+    logoutBtn.addEventListener('click', async () => {
+      try { await SuperTokens.Session.signOut(); } catch (e) {}
+      window.location.href = 'index.html'; // login page
+    });
+  }
+</script>
 </body>
 </html>
+
