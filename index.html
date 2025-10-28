@@ -1,92 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login / Register</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Knowvion — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-
-  .container {
-    background: #fff;
-    padding: 40px 35px;
-    border-radius: 15px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    width: 380px;
-    max-width: 90%;
-    text-align: center;
-  }
-
-  h2 {
-    margin-bottom: 25px;
-    color: #333;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-  }
-
-  input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px 15px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-  }
-
-  input:focus {
-    border-color: #5563DE;
-    outline: none;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
-  }
-
-  button {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: none;
-    background: #5563DE;
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
-    transition: 0.3s;
-  }
-
-  button:hover {
-    background: #4350b5;
-    box-shadow: 0 7px 15px rgba(0,0,0,0.25);
-  }
-
-  #message {
-    margin-top: 10px;
-    font-weight: bold;
-    min-height: 20px;
-  }
+  body { margin:0; font-family:"Poppins",sans-serif; background:#f8f9fa; display:flex; justify-content:center; align-items:center; height:100vh; }
+  .login-container { background:#ffffff; padding:40px 30px; border-radius:15px; box-shadow:0 12px 30px rgba(0,0,0,0.1); width:100%; max-width:400px; text-align:center; }
+  h2 { margin-bottom:20px; color:#333; }
+  input { width:100%; padding:12px 15px; margin:10px 0; border-radius:8px; border:1px solid #ccc; font-size:16px; box-sizing:border-box; }
+  button { width:100%; padding:12px; margin-top:15px; background:#007aff; color:#fff; font-weight:600; border:none; border-radius:8px; cursor:pointer; font-size:16px; transition:0.2s; }
+  button:hover { background:#0064e6; }
+  .info { font-size:14px; color:#555; margin-top:12px; }
+  .info a { color:#007aff; text-decoration:none; }
+  .info a:hover { text-decoration:underline; }
+  .success { color:green; margin-top:10px; }
+  .error { color:red; margin-top:10px; }
 </style>
 </head>
 <body>
-<div class="container">
-  <h2>Login / Register</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <input type="password" id="repeatPassword" placeholder="Repeat Password">
-  <button id="registerBtn">Register</button>
-  <button id="loginBtn">Login</button>
-  <p id="message"></p>
+
+<div class="login-container">
+  <h2>Login to Knowvion</h2>
+  <input type="email" id="email" placeholder="Enter your email" required />
+  <button id="loginBtn">Send Magic Link</button>
+  <div class="success" id="successMsg"></div>
+  <div class="error" id="errorMsg"></div>
+  <div class="info">Don't have an account? <a href="#" id="registerLink">Register</a></div>
 </div>
 
-<!-- Supabase JS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
   const supabaseUrl = 'https://rzdigwqgejbowdljuuei.supabase.co';
@@ -94,39 +37,38 @@
   const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
   const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-  const repeatPasswordInput = document.getElementById('repeatPassword');
-  const registerBtn = document.getElementById('registerBtn');
   const loginBtn = document.getElementById('loginBtn');
-  const message = document.getElementById('message');
+  const successMsg = document.getElementById('successMsg');
+  const errorMsg = document.getElementById('errorMsg');
+  const registerLink = document.getElementById('registerLink');
 
-  // Auto redirect logged-in users
-  supabase.auth.getSession().then(({ data }) => {
+  // If user already logged in → redirect to dashboard
+  supabase.auth.getSession().then(({data})=>{
     if(data.session) window.location.href = 'dashboard.html';
   });
 
-  // Register
-  registerBtn.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    const repeatPassword = repeatPasswordInput.value;
-    if(password !== repeatPassword){
-      message.style.color='red';
-      message.textContent='Passwords do not match';
-      return;
-    }
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if(error) message.style.color='red', message.textContent=error.message;
-    else message.style.color='green', message.textContent='Registered! Check your email.';
-  });
-
-  // Login
   loginBtn.addEventListener('click', async () => {
     const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if(error) message.style.color='red', message.textContent=error.message;
-    else window.location.href = 'dashboard.html';
+    if(!email){ errorMsg.textContent = "Please enter a valid email."; successMsg.textContent=""; return; }
+
+    const {error} = await supabase.auth.signInWithOtp({ email, options:{ emailRedirectTo: window.location.origin+'/dashboard.html' } });
+
+    if(error){
+      errorMsg.textContent = error.message;
+      successMsg.textContent = "";
+    } else {
+      successMsg.textContent = "Magic link sent! Check your email to login.";
+      errorMsg.textContent = "";
+    }
+  });
+
+  registerLink.addEventListener('click', ()=>{
+    const email = emailInput.value.trim();
+    if(!email){ alert("Enter your email to register"); return; }
+    supabase.auth.signUp({ email }).then(({error})=>{
+      if(error) alert(error.message);
+      else alert("Registration email sent! Check your inbox.");
+    });
   });
 </script>
 </body>
