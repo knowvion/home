@@ -4,24 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Knowvion Dashboard</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
 <style>
-  :root {
-    --bg: #ffffff;
-    --text: #000000;
-    --card: #f4f4f4;
-    --shadow: 0 4px 12px rgba(0,0,0,0.1);
-    --radius: 16px;
-    --accent: #0078ff;
-  }
-
   body {
     margin: 0;
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: "Poppins", sans-serif;
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff;
+    color: #000000;
     display: flex;
     height: 100vh;
     overflow: hidden;
@@ -29,283 +19,194 @@
 
   /* Sidebar */
   .sidebar {
-    width: 60px;
-    background: var(--card);
-    box-shadow: var(--shadow);
+    width: 70px;
+    background-color: #f2f2f2;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-    border-radius: 0 var(--radius) var(--radius) 0;
-    transition: width 0.3s ease;
-    overflow-x: hidden;
+    transition: width 0.3s;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    overflow: hidden;
   }
-
   .sidebar:hover {
-    width: 180px;
+    width: 220px;
   }
-
   .sidebar a {
-    width: 100%;
+    text-decoration: none;
+    color: #000;
+    width: 90%;
+    padding: 12px 10px;
     display: flex;
     align-items: center;
-    padding: 10px 15px;
-    color: var(--text);
-    text-decoration: none;
-    transition: all 0.2s ease;
-    font-size: 15px;
+    border-radius: 10px;
+    margin: 6px 0;
+    transition: background 0.2s;
   }
-
-  .sidebar a i {
-    font-size: 18px;
-    margin-right: 0;
-    min-width: 25px;
-    text-align: center;
-    transition: margin-right 0.3s ease;
+  .sidebar a:hover {
+    background-color: #e2e2e2;
   }
-
+  .sidebar img {
+    width: 22px;
+    height: 22px;
+    margin-right: 12px;
+    filter: invert(0);
+  }
   .sidebar span {
+    white-space: nowrap;
+    overflow: hidden;
     opacity: 0;
-    margin-left: 0;
-    transition: opacity 0.3s ease, margin-left 0.3s ease;
+    transition: opacity 0.3s;
   }
-
-  .sidebar:hover a i {
-    margin-right: 10px;
-  }
-
   .sidebar:hover span {
     opacity: 1;
-    margin-left: 8px;
   }
 
-  .sidebar a:hover {
-    background: rgba(0,0,0,0.05);
-    border-radius: 10px;
-  }
-
-  /* Main Area */
+  /* Main area */
   .main {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 40px;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
   }
 
-  /* Top Banner */
+  /* Banner */
   .banner {
-    background: var(--card);
-    padding: 10px;
-    border-radius: var(--radius);
-    text-align: center;
-    font-weight: 500;
-    box-shadow: var(--shadow);
-    animation: slideBanner 20s linear infinite;
-    margin-bottom: 15px;
-  }
-
-  @keyframes slideBanner {
-    0% {opacity: 0; transform: translateY(-10px);}
-    5%,95% {opacity: 1; transform: translateY(0);}
-    100% {opacity: 0; transform: translateY(-10px);}
-  }
-
-  /* Topbar */
-  .topbar {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 20px;
+    width: 100%;
+    aspect-ratio: 16 / 12;
+    background: url('https://images.unsplash.com/photo-1581091870627-3b5c61f07c3b?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     margin-bottom: 30px;
   }
 
-  .icon-btn {
-    background: var(--card);
+  /* Header buttons */
+  .header {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+  }
+  .header button {
+    background: #f2f2f2;
     border: none;
-    padding: 10px;
-    border-radius: 50%;
-    box-shadow: var(--shadow);
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     cursor: pointer;
-    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
   }
-
-  .icon-btn:hover {
+  .header button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+  .header img {
+    width: 20px;
+    height: 20px;
+    filter: invert(0);
   }
 
-  /* Dynamic Panel Area */
-  #panel-content {
-    flex: 1;
-    text-align: center;
-    overflow-y: auto;
+  /* Sections */
+  .section {
+    margin-bottom: 30px;
   }
-
-  .course {
-    background: var(--card);
-    color: var(--text);
-    width: 260px;
-    padding: 25px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    margin: 15px;
-    display: inline-block;
-    vertical-align: top;
-    transition: all 0.3s ease;
-  }
-
-  .course:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  }
-
-  .course i {
-    font-size: 40px;
+  .section h2 {
     margin-bottom: 10px;
   }
-
-  .course h3 {
-    font-size: 20px;
-    margin-bottom: 8px;
-  }
-
-  .course p {
-    font-size: 14px;
-    color: #333;
+  .card {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
   }
 
   /* Cookie popup */
-  .cookie-box {
+  .cookie-banner {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--card);
-    color: var(--text);
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    bottom: -100px;
+    left: 0;
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
     font-size: 14px;
-    animation: fadeIn 0.5s ease;
+    transition: bottom 0.5s;
   }
-
-  .cookie-box button {
-    background: var(--accent);
-    color: white;
+  .cookie-banner.show {
+    bottom: 0;
+  }
+  .cookie-banner button {
+    background: #fff;
+    color: #000;
     border: none;
-    border-radius: 8px;
-    padding: 6px 14px;
+    padding: 6px 10px;
+    margin-left: 10px;
+    border-radius: 6px;
     cursor: pointer;
   }
 
-  @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to {opacity: 1; transform: translateY(0);}
-  }
 </style>
 </head>
 <body>
-
+  <!-- Sidebar -->
   <div class="sidebar">
-    <a href="#" onclick="loadPanel('home')"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <a href="#" onclick="loadPanel('profile')"><i class="fa-solid fa-user"></i><span>Your Profile</span></a>
-    <a href="#" onclick="loadPanel('notifications')"><i class="fa-solid fa-bell"></i><span>Notifications</span></a>
-    <a href="#" onclick="loadPanel('theme')"><i class="fa-solid fa-palette"></i><span>Theme</span></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png"><span>Home</span></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png"><span>Profile</span></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712105.png"><span>AI Section</span></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"><span>Courses</span></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077976.png"><span>Theme</span></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png"><span>Settings</span></a>
   </div>
 
+  <!-- Main content -->
   <div class="main">
-    <div class="banner" id="bannerText">
-      🚀 Latest Update: New JEE 2026 Practice Tests are Live!
+    <div class="header">
+      <button id="notifBtn"><img src="https://cdn-icons-png.flaticon.com/512/1827/1827349.png"></button>
+      <button id="profileBtn"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png"></button>
     </div>
 
-    <div class="topbar">
-      <button class="icon-btn" id="notifBtn"><i class="fa-solid fa-bell"></i></button>
-      <button class="icon-btn" id="profileBtn"><i class="fa-solid fa-user"></i></button>
+    <div class="banner"></div>
+
+    <div class="section">
+      <h2>Latest Tech Discoveries</h2>
+      <div class="card">AI reaching new milestones in reasoning and problem solving.</div>
+      <div class="card">Quantum computing prototypes now solve real optimization problems.</div>
     </div>
 
-    <div id="panel-content">
-      <h1>Our Top Courses</h1>
-      <div class="course">
-        <i class="fa-solid fa-flask"></i>
-        <h3>Course 1</h3>
-        <p>Explore deep Physics concepts interactively.</p>
-      </div>
-      <div class="course">
-        <i class="fa-solid fa-atom"></i>
-        <h3>Course 2</h3>
-        <p>Master Chemistry through visualization and logic.</p>
-      </div>
-      <div class="course">
-        <i class="fa-solid fa-calculator"></i>
-        <h3>Course 3</h3>
-        <p>Learn advanced Math with real problem-solving power.</p>
-      </div>
+    <div class="section">
+      <h2>For You</h2>
+      <div class="card">Recommended reads: The Art of Focus by JEE toppers.</div>
+      <div class="card">Mindset Tips: How to study 6 hrs with full concentration.</div>
     </div>
   </div>
 
-  <!-- Cookie Box -->
-  <div class="cookie-box" id="cookieBox">
-    🍪 We use cookies to enhance your learning experience.
-    <button onclick="acceptCookies()">Got it</button>
+  <!-- Cookies -->
+  <div id="cookieBanner" class="cookie-banner">
+    We use cookies to enhance your experience.
+    <button id="acceptCookies">Okay</button>
   </div>
 
 <script>
-  // Protect dashboard access
   document.addEventListener("DOMContentLoaded", () => {
     const user = netlifyIdentity.currentUser();
     if (!user) {
-      alert("⚠️ Please login to access this dashboard.");
+      alert("Please login to access this page.");
       window.location.href = "/";
     }
+
+    // Cookie logic
+    const banner = document.getElementById('cookieBanner');
+    const accepted = localStorage.getItem('cookiesAccepted');
+    if (!accepted) banner.classList.add('show');
+    document.getElementById('acceptCookies').addEventListener('click', () => {
+      localStorage.setItem('cookiesAccepted', 'yes');
+      banner.classList.remove('show');
+    });
   });
-
-  // Cookie permission
-  function acceptCookies() {
-    localStorage.setItem("cookiesAccepted", "true");
-    document.getElementById("cookieBox").style.display = "none";
-  }
-  if (localStorage.getItem("cookiesAccepted")) {
-    document.getElementById("cookieBox").style.display = "none";
-  }
-
-  // Dynamic panel loader
-  function loadPanel(panel) {
-    const content = document.getElementById("panel-content");
-    if (panel === "home") {
-      content.innerHTML = `
-        <h1>Our Top Courses</h1>
-        <div class='course'><i class='fa-solid fa-flask'></i><h3>Course 1</h3><p>Explore deep Physics concepts interactively.</p></div>
-        <div class='course'><i class='fa-solid fa-atom'></i><h3>Course 2</h3><p>Master Chemistry through visualization and logic.</p></div>
-        <div class='course'><i class='fa-solid fa-calculator'></i><h3>Course 3</h3><p>Learn advanced Math with real problem-solving power.</p></div>
-      `;
-    } else if (panel === "profile") {
-      content.innerHTML = "<h2>👤 Your Profile</h2><p>Profile management coming soon...</p>";
-    } else if (panel === "notifications") {
-      content.innerHTML = "<h2>🔔 Notifications</h2><p>No new alerts for now!</p>";
-    } else if (panel === "theme") {
-      content.innerHTML = `
-        <h2>🎨 Change Theme</h2>
-        <p>Switch between light and dark mode instantly.</p>
-        <button onclick='toggleTheme()' style='padding:8px 16px;border:none;border-radius:8px;cursor:pointer;background:var(--accent);color:white;'>Toggle Theme</button>
-      `;
-    }
-  }
-
-  // Theme toggle
-  let dark = false;
-  function toggleTheme() {
-    dark = !dark;
-    document.documentElement.style.setProperty("--bg", dark ? "#000" : "#fff");
-    document.documentElement.style.setProperty("--text", dark ? "#fff" : "#000");
-    document.documentElement.style.setProperty("--card", dark ? "#111" : "#f4f4f4");
-  }
-
-  // Icon buttons
-  document.getElementById("notifBtn").onclick = () => loadPanel('notifications');
-  document.getElementById("profileBtn").onclick = () => loadPanel('profile');
 </script>
-
 </body>
 </html>
