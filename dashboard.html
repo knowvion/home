@@ -5,270 +5,129 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Knowvion — Dashboard</title>
 
-<!-- Netlify Identity -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
 <!-- Font (Poppins) -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-  /* =========================
-     THEME VARIABLES
-     ========================= */
-  :root{
-    --page-bg: #efefef;       /* visible behind app so rounded corners show */
-    --app-bg: #ffffff;        /* main app background */
-    --panel: #fbfbfd;         /* panel/card color */
-    --text: #0b0b0b;
-    --muted: #6b6b6b;
-    --accent: #007aff;
-    --shadow-ios: 0 18px 50px rgba(10,10,10,0.08);
-    --radius-main: 20px;     /* only outer 4 corners */
-    --radius-small: 8px;     /* small rounding for buttons only */
-  }
-  body[data-theme="dark"]{
-    --page-bg:#0b0b0b;
-    --app-bg:#0b0b0b;
-    --panel:#121212;
-    --text:#ffffff;
-    --muted:#bfbfbf;
-    --accent:#0a84ff;
-    --shadow-ios: 0 18px 50px rgba(0,0,0,0.75);
-  }
-
-  html,body{height:100%; margin:0; background:var(--page-bg); font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial; -webkit-font-smoothing:antialiased; color:var(--text);}
-
-  /* =========================
-     APP WRAPPER: rounded 4 outer corners only
-     ========================= */
-  .app-wrap{
-    width: calc(100% - 48px);
-    height: calc(100% - 48px);
-    margin: 24px;
-    border-radius: var(--radius-main);
-    overflow: hidden;
-    box-shadow: var(--shadow-ios);
-    display: flex;
-    background: var(--app-bg);
-  }
-
-  /* =========================
-     SIDEBAR
-     ========================= */
-  .sidebar {
-    width: 250px;
-    min-width: 70px;
-    background: linear-gradient(180deg,var(--panel),#f0f0f2);
-    padding: 18px 10px;
-    display:flex;
-    flex-direction:column;
-    align-items:stretch;
-    gap:10px;
-    transition: width 200ms ease;
-    border-right: 1px solid rgba(0,0,0,0.04);
-  }
-  .sidebar.collapsed { width: 76px; }
-
-  .logo {
-    display:flex; align-items:center; gap:12px; padding:10px; margin-bottom:4px;
-    border-radius:12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
-    justify-content:flex-start;
-  }
-  .logo .icon {
-    width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:10px;
-    background:var(--app-bg); color:var(--accent); font-weight:700; font-size:18px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-  }
-  .logo .text { font-size:18px; font-weight:700; color:var(--text); }
-
-  .sidebar .nav {
-    display:flex; flex-direction:column; gap:6px; padding:6px;
-  }
-
-  /* nav links are <a> so they fallback if JS disabled */
-  .nav a {
-    display:flex; align-items:center; gap:12px; padding:10px 12px; color:var(--text); text-decoration:none; border-radius:12px;
-    transition: background 150ms, transform 120ms;
-    font-weight:600;
-  }
-  .nav a:hover{ background: rgba(0,0,0,0.04); transform: translateX(4px); }
-
-  /* icon SVGs share the same style */
-  .nav svg { width:20px; height:20px; color:var(--accent); flex:0 0 20px; }
-
-  /* label visible only on expanded sidebar */
-  .nav .label { opacity:1; transition:opacity 150ms ease; }
-  .sidebar.collapsed .nav .label { opacity:0; pointer-events:none; width:0; display:inline-block; }
-
-  .nav .logout { margin-top:8px; color:#c33; font-weight:700; }
-
-  /* =========================
-     MAIN AREA
-     ========================= */
-  .main {
-    flex:1; display:flex; flex-direction:column; gap:14px; padding:18px 22px; overflow:auto;
-    background: transparent;
-  }
-
-  /* top-right quick actions and theme toggle */
-  .top-row {
-    display:flex; justify-content:space-between; align-items:center; gap:10px;
-  }
-  .top-row .left { display:flex; align-items:center; gap:12px; }
-  .top-row .right { display:flex; align-items:center; gap:10px; }
-
-  .quick-btn {
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    background:var(--panel); border-radius:12px; padding:8px 12px; border:none; cursor:pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-    transition: transform 130ms;
-    color:var(--text);
-  }
-  .quick-btn:hover { transform: translateY(-3px); }
-
-  /* place quick buttons at extreme right */
-  .top-row .right { margin-left:auto; }
-
-  /* banner small strip */
-  .banner {
-    width:100%;
-    height:140px; /* small strip, not fullscreen */
-    border-radius:8px;
-    overflow:hidden;
-    box-shadow: 0 12px 34px rgba(0,0,0,0.06);
-    background-position:center; background-size:cover;
-  }
-
-  /* content area: panels loaded dynamically here */
-  #contentLoader {
-    margin-top:8px;
-  }
-
-  /* cards inside content will be small rounded */
-  .card {
-    background:var(--panel); padding:14px; border-radius:10px; box-shadow: 0 8px 18px rgba(0,0,0,0.04); margin-bottom:12px;
-  }
-  .card h3{ margin:0 0 8px 0; }
-  .muted{ color:var(--muted); font-size:14px; }
-
-  /* cookie notice minimal */
-  .cookie {
-    position:fixed; right:22px; bottom:22px; background:var(--panel); color:var(--text); padding:10px 12px; border-radius:12px; box-shadow: var(--shadow-ios); z-index:60;
-    display:flex; gap:10px; align-items:center;
-  }
-  .cookie button{ background:var(--accent); color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; }
-
-  /* responsive tweaks */
-  @media (max-width:900px){
-    .app-wrap { margin:10px; }
-    .sidebar { position:fixed; z-index:80; left:0; top:0; bottom:0; }
-    .sidebar.collapsed { width:68px; }
-    .main { margin-left:68px; }
-  }
+:root{
+  --page-bg: #efefef;       
+  --app-bg: #ffffff;        
+  --panel: #fbfbfd;         
+  --text: #0b0b0b;
+  --muted: #6b6b6b;
+  --accent: #007aff;
+  --shadow-ios: 0 18px 50px rgba(10,10,10,0.08);
+  --radius-main: 20px;     
+  --radius-small: 8px;     
+}
+body[data-theme="dark"]{
+  --page-bg:#0b0b0b;
+  --app-bg:#0b0b0b;
+  --panel:#121212;
+  --text:#ffffff;
+  --muted:#bfbfbf;
+  --accent:#0a84ff;
+  --shadow-ios: 0 18px 50px rgba(0,0,0,0.75);
+}
+html,body{height:100%; margin:0; background:var(--page-bg); font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial; -webkit-font-smoothing:antialiased; color:var(--text);}
+.app-wrap{width: calc(100% - 48px); height: calc(100% - 48px); margin: 24px; border-radius: var(--radius-main); overflow: hidden; box-shadow: var(--shadow-ios); display: flex; background: var(--app-bg);}
+.sidebar {width: 250px; min-width: 70px; background: linear-gradient(180deg,var(--panel),#f0f0f2); padding: 18px 10px; display:flex; flex-direction:column; align-items:stretch; gap:10px; transition: width 200ms ease; border-right: 1px solid rgba(0,0,0,0.04);}
+.sidebar.collapsed { width: 76px; }
+.logo {display:flex; align-items:center; gap:12px; padding:10px; margin-bottom:4px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3)); justify-content:flex-start;}
+.logo .icon {width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:var(--app-bg); color:var(--accent); font-weight:700; font-size:18px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);}
+.logo .text { font-size:18px; font-weight:700; color:var(--text); }
+.sidebar .nav {display:flex; flex-direction:column; gap:6px; padding:6px;}
+.nav a {display:flex; align-items:center; gap:12px; padding:10px 12px; color:var(--text); text-decoration:none; border-radius:12px; transition: background 150ms, transform 120ms; font-weight:600;}
+.nav a:hover{ background: rgba(0,0,0,0.04); transform: translateX(4px); }
+.nav .label { opacity:1; transition:opacity 150ms ease; }
+.sidebar.collapsed .nav .label { opacity:0; pointer-events:none; width:0; display:inline-block; }
+.nav .logout { margin-top:8px; color:#c33; font-weight:700; }
+.main {flex:1; display:flex; flex-direction:column; gap:14px; padding:18px 22px; overflow:auto; background: transparent;}
+.top-row {display:flex; justify-content:space-between; align-items:center; gap:10px;}
+.top-row .left { display:flex; align-items:center; gap:12px; }
+.top-row .right { display:flex; align-items:center; gap:10px; margin-left:auto; }
+.quick-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--panel); border-radius:12px; padding:8px 12px; border:none; cursor:pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.04); transition: transform 130ms; color:var(--text); }
+.quick-btn:hover { transform: translateY(-3px); }
+.banner { width:100%; height:140px; border-radius:8px; overflow:hidden; box-shadow: 0 12px 34px rgba(0,0,0,0.06); background-position:center; background-size:cover; }
+#contentLoader { margin-top:8px; padding:6px 2px 80px 2px; }
+.card { background:var(--panel); padding:14px; border-radius:10px; box-shadow: 0 8px 18px rgba(0,0,0,0.04); margin-bottom:12px; }
+.card h3{ margin:0 0 8px 0; }
+.muted{ color:var(--muted); font-size:14px; }
+.cookie { position:fixed; right:22px; bottom:22px; background:var(--panel); color:var(--text); padding:10px 12px; border-radius:12px; box-shadow: var(--shadow-ios); z-index:60; display:flex; gap:10px; align-items:center; }
+.cookie button{ background:var(--accent); color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; }
+@media (max-width:900px){ .app-wrap { margin:10px; } .sidebar { position:fixed; z-index:80; left:0; top:0; bottom:0; } .sidebar.collapsed { width:68px; } .main { margin-left:68px; } }
 </style>
 </head>
 <body>
 
-<!-- APP WRAPPER (rounded outer corners only) -->
 <div class="app-wrap" role="application">
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar" aria-label="Sidebar navigation">
     <div class="logo" role="img" aria-label="Knowvion logo">
-      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19"/></svg></div>
+      <div class="icon">K</div>
       <div class="text">Knowvion</div>
     </div>
 
     <nav class="nav" role="navigation" aria-label="Main sections">
-      <!-- Links are real <a> so they work if JS disabled or user opens directly -->
-      <a href="home.html" data-section="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 11.5L12 5l9 6.5"/><path d="M5 21h14a1 1 0 0 0 1-1V10"/></svg><span class="label">Home</span></a>
-
-      <a href="courses.html" data-section="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 7h18"/><path d="M6 3h12v18H6z"/></svg><span class="label">Courses</span></a>
-
-      <a href="ai.html" data-section="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="7" width="18" height="11" rx="2"/><path d="M7 7V5a2 2 0 1 1 4 0v2"/><path d="M17 7V5a2 2 0 1 0-4 0v2"/></svg><span class="label">AI Section</span></a>
-
-      <a href="profile.html" data-section="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg><span class="label">Profile</span></a>
-
-      <a href="settings.html" data-section="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15..."/></svg><span class="label">Settings</span></a>
-
-      <a href="notifications.html" data-section="notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 17h5l-1.4-1.4"/><path d="M6 17v-6a6 6 0 0 1 12 0v6"/></svg><span class="label">Notifications</span></a>
-
-      <a href="#" data-section="logout" class="logout" id="navLogout" role="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="label">Logout</span></a>
+      <a href="home.html" data-section="home"><span class="label">Home</span></a>
+      <a href="courses.html" data-section="courses"><span class="label">Courses</span></a>
+      <a href="ai.html" data-section="ai"><span class="label">AI Section</span></a>
+      <a href="profile.html" data-section="profile"><span class="label">Profile</span></a>
+      <a href="#" data-section="logout" class="logout" id="navLogout"><span class="label">Logout</span></a>
     </nav>
   </aside>
 
   <!-- MAIN -->
   <div class="main" role="main">
-
-    <!-- TOP ROW: placed at top-right quick actions -->
-    <div class="top-row" aria-hidden="false">
-      <div class="left">
-        <!-- empty left side, logo handled by sidebar -->
-      </div>
-
+    <div class="top-row">
+      <div class="left"></div>
       <div class="right">
-        <!-- quick action buttons (top-right) -->
         <button class="quick-btn" id="btnNotifications" title="Open notifications">🔔</button>
         <button class="quick-btn" id="btnProfile" title="Open profile">👤</button>
         <button class="quick-btn" id="themeBtn" title="Toggle theme">🌓</button>
       </div>
     </div>
 
-    <!-- BANNER (small strip) -->
     <div id="banner" class="banner" style="background-image:url('https://images.unsplash.com/photo-1526378727609-8f1b0f8d1d11?auto=format&fit=crop&w=1200&q=80')"></div>
 
-    <!-- dynamic content loader -->
-    <div id="contentLoader" style="padding:6px 2px 80px 2px;">
-      <!-- initial content will be fetched and inserted here -->
-    </div>
-
+    <div id="contentLoader"></div>
   </div>
 </div>
 
-<!-- cookie consent -->
 <div class="cookie" id="cookie" style="display:none">
   <div style="font-size:14px">🍪 We use cookies to improve the site.</div>
   <div><button id="acceptCookie">Accept</button></div>
 </div>
 
-<!-- =========================
-     SCRIPTS (auth, dynamic loader, UI)
-     Put script before </body> (end of body)
-     ========================= -->
+<!-- SUPABASE SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
-/* ========= UTILS ========= */
-const $ = s => document.querySelector(s);
-const $$ = s => Array.from(document.querySelectorAll(s));
+const supabaseUrl = 'https://rzdigwqgejbowdljuuei.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6ZGlnd3FnZWpib3dkbGp1dWVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2Mjc2MTgsImV4cCI6MjA3NzIwMzYxOH0.WlTlj3Vr4euv7EOzxNCNHB4rqZQeglPO07V9IBnUoJY';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-/* ========= AUTH CHECK (Netlify Identity) =========
-   - If user not logged in → redirect to error.html
-*/
-function runAuthCheck() {
-  if (typeof netlifyIdentity === 'undefined') {
-    // try again after short wait
-    setTimeout(runAuthCheck, 50);
-    return;
-  }
-  const user = netlifyIdentity.currentUser();
-  if (!user) {
-    // redirect unauthorized to error page as requested
-    window.location.href = '/error.html';
-    return;
-  }
-  // optionally set profile info if needed
-  // e.g. document.title = `Knowvion — ${user.email}`;
+// AUTH CHECK
+async function runAuthCheck() {
+  const { data } = await supabase.auth.getSession();
+  if(!data.session) window.location.href = '/error.html';
 }
 document.addEventListener('DOMContentLoaded', runAuthCheck);
 
-/* ========= DYNAMIC LOADER =========
-   - Loads external files like home.html into #contentLoader
-   - Also updates location.hash so direct links like dashboard.html#ai work
-   - Each sidebar <a href="..."> remains a fallback; JS intercepts click to load dynamically
-*/
+// Logout
+document.getElementById('navLogout').addEventListener('click', async (e)=>{
+  e.preventDefault();
+  await supabase.auth.signOut();
+  window.location.href = '/error.html';
+});
+
+// DYNAMIC LOADER
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
 document.addEventListener('DOMContentLoaded', function() {
   const loader = $('#contentLoader');
   const defaultSection = 'home';
 
-  // load according to hash or default
   async function loadFromHash() {
     const name = (location.hash && location.hash.startsWith('#')) ? location.hash.slice(1) : defaultSection;
     await loadSection(name);
@@ -276,124 +135,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
   async function loadSection(name) {
     if (!name) name = defaultSection;
-    // if logout
-    if (name === 'logout') {
-      if (typeof netlifyIdentity !== 'undefined') {
-        netlifyIdentity.logout();
-      } else {
-        window.location.href = '/error.html';
-      }
-      return;
-    }
-
-    // fetch file home.html, ai.html, etc.
+    if (name === 'logout') return;
     try {
-      // show simple loader UI
       loader.innerHTML = `<div style="padding:30px;text-align:center;color:var(--muted)">Loading ${name}…</div>`;
       const res = await fetch(`${name}.html`, {cache: "no-store"});
-      if (!res.ok) throw new Error('Not found');
+      if(!res.ok) throw new Error('Not found');
       const html = await res.text();
       loader.innerHTML = html;
-      // set hash without scrolling
-      if (location.hash !== `#${name}`) history.replaceState(null, '', `#${name}`);
-    } catch (err) {
-      console.error(err);
+      if(location.hash !== `#${name}`) history.replaceState(null,'',`#${name}`);
+    } catch(err){
       loader.innerHTML = `<div class="card"><h3>Unable to load "${name}"</h3><p class="muted">Make sure <code>${name}.html</code> exists in the same folder.</p></div>`;
     }
   }
 
-  // intercept clicks on nav <a> to load dynamically
   $$('.nav a').forEach(a => {
-    a.addEventListener('click', function(e) {
-      // when data-section exists, intercept and load dynamically
+    a.addEventListener('click', function(e){
       const section = a.getAttribute('data-section');
-      if (section) {
+      if(section){
         e.preventDefault();
         loadSection(section);
-        // visually set active
-        $$('.nav a').forEach(x => x.classList.remove('active'));
+        $$('.nav a').forEach(x=>x.classList.remove('active'));
         a.classList.add('active');
       }
-      // if no data-section, let it behave as normal link
     });
   });
 
-  // top quick buttons open inside panels
   $('#btnNotifications').addEventListener('click', ()=> loadSection('notifications'));
   $('#btnProfile').addEventListener('click', ()=> loadSection('profile'));
-
-  // handle initial load from hash
   loadFromHash();
-
-  // also handle forward/back history (so back button works)
   window.addEventListener('hashchange', loadFromHash);
 });
 
-/* ========= UI: Sidebar collapse / theme / cookie ========= */
+// UI: Sidebar collapse / theme / cookie
 document.addEventListener('DOMContentLoaded', function(){
-  const sidebar = document.getElementById('sidebar');
-  const toggle = document.getElementById('toggleSidebar');
-  // clicking the bars icon toggles collapsed state (we placed bars in top-left of main previously)
-  // but since we didn't add bars element in this final, allow double-click on logo to toggle
-  // (common pattern)
+  const sidebar = $('#sidebar');
   $('.logo').addEventListener('dblclick', ()=> sidebar.classList.toggle('collapsed'));
 
-  // theme button (top-right)
   $('#themeBtn').addEventListener('click', ()=>{
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-      document.body.removeAttribute('data-theme');
-      localStorage.setItem('knowvion_theme','light');
-    } else {
-      document.body.setAttribute('data-theme','dark');
-      localStorage.setItem('knowvion_theme','dark');
-    }
+    const isDark = document.body.getAttribute('data-theme')==='dark';
+    if(isDark){ document.body.removeAttribute('data-theme'); localStorage.setItem('knowvion_theme','light'); }
+    else { document.body.setAttribute('data-theme','dark'); localStorage.setItem('knowvion_theme','dark'); }
   });
-
-  // initialize theme from localStorage
   const pref = localStorage.getItem('knowvion_theme');
-  if (pref === 'dark') document.body.setAttribute('data-theme','dark');
+  if(pref==='dark') document.body.setAttribute('data-theme','dark');
 
-  // cookie consent
   const cookie = $('#cookie');
   const accept = $('#acceptCookie');
-  if (!localStorage.getItem('knowvion_cookies')) {
-    cookie.style.display = 'flex';
-  }
+  if(!localStorage.getItem('knowvion_cookies')) cookie.style.display='flex';
   accept.addEventListener('click', ()=>{
     localStorage.setItem('knowvion_cookies','yes');
-    cookie.style.display = 'none';
-  });
-
-  // logout link (in case user clicks)
-  $('#navLogout').addEventListener('click', (e)=>{
-    e.preventDefault();
-    if (typeof netlifyIdentity !== 'undefined') {
-      netlifyIdentity.logout();
-    } else {
-      window.location.href = '/error.html';
-    }
+    cookie.style.display='none';
   });
 });
-
-/* ========= Netlify identity events (keep auth in sync) ========= */
-(function attachNetlifyEvents(){
-  const tryAttach = ()=>{
-    if (typeof netlifyIdentity === 'undefined') return setTimeout(tryAttach,200);
-    netlifyIdentity.on('login', user=>{
-      runAuthCheck();
-      netlifyIdentity.close();
-      // reload current section after login
-      const sec = location.hash ? location.hash.slice(1) : 'home';
-      location.hash = sec; // triggers hashchange -> load
-    });
-    netlifyIdentity.on('logout', ()=>{
-      // send to error.html as required
-      window.location.href = '/error.html';
-    });
-  };
-  tryAttach();
-})();
 </script>
 </body>
 </html>
