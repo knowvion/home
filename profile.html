@@ -1,0 +1,138 @@
+<div class="profile-container">
+
+  <!-- Profile Header -->
+  <section class="profile-section">
+    <h2>👤 Your Profile</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3 id="profileName">User Name</h3>
+        <p id="profileEmail" class="muted">user@example.com</p>
+      </div>
+      <div class="card">
+        <h3>Account Status</h3>
+        <p class="muted">Active</p>
+      </div>
+      <div class="card">
+        <h3>Edit Profile</h3>
+        <button class="quick-btn" onclick="alert('Edit Profile feature coming soon')">Edit</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Registered Courses -->
+  <section class="profile-section">
+    <h2>📚 Registered Courses</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Course 1</h3>
+        <p class="muted">Status: Enrolled</p>
+      </div>
+      <div class="card">
+        <h3>Course 2</h3>
+        <p class="muted">Status: Completed</p>
+      </div>
+      <div class="card">
+        <h3>Course 3</h3>
+        <p class="muted">Status: In Progress</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Achievements -->
+  <section class="profile-section">
+    <h2>🏆 Achievements</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Top Performer</h3>
+        <p class="muted">Ranked in top 5% of learners this month</p>
+      </div>
+      <div class="card">
+        <h3>Consistency Badge</h3>
+        <p class="muted">Logged in daily for 30 days</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<style>
+.profile-container {
+  padding: 16px;
+  animation: fadeIn 0.6s ease;
+}
+
+.profile-section {
+  margin-bottom: 24px;
+}
+
+.profile-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+  gap:12px;
+}
+
+.card {
+  background: var(--panel);
+  padding: 14px 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-top:0;
+  margin-bottom:6px;
+  font-size:16px;
+}
+
+.card p {
+  margin:0;
+  font-size:14px;
+  color: var(--muted);
+}
+
+.quick-btn {
+  background: var(--accent);
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.quick-btn:hover {
+  background: #005fcc;
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(8px);}
+  to {opacity:1; transform: translateY(0);}
+}
+</style>
+
+<script>
+// Fill profile info from Netlify Identity if available
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof netlifyIdentity !== 'undefined' && netlifyIdentity.currentUser()){
+    const user = netlifyIdentity.currentUser();
+    const name = (user.user_metadata && (user.user_metadata.full_name || user.user_metadata.name)) ? (user.user_metadata.full_name || user.user_metadata.name) : (user.email || 'User');
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileEmail').textContent = user.email || '';
+  }
+});
+</script>

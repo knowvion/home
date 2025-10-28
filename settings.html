@@ -1,0 +1,135 @@
+<div class="settings-container">
+
+  <!-- Page Header -->
+  <section class="settings-section">
+    <h2>⚙️ Settings</h2>
+    <div class="card-grid">
+
+      <!-- Theme Toggle -->
+      <div class="card">
+        <h3>Theme</h3>
+        <p class="muted">Switch between Light and Dark mode</p>
+        <button id="themeToggleBtn" class="quick-btn">Toggle Theme</button>
+      </div>
+
+      <!-- Notifications Toggle -->
+      <div class="card">
+        <h3>Notifications</h3>
+        <p class="muted">Enable or disable notifications from Knowvion</p>
+        <button id="notifToggleBtn" class="quick-btn">Toggle Notifications</button>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="card">
+        <h3>Account</h3>
+        <p class="muted">Manage your email, password, and profile info</p>
+        <button class="quick-btn" onclick="alert('Account settings coming soon')">Edit Account</button>
+      </div>
+
+      <!-- Privacy -->
+      <div class="card">
+        <h3>Privacy</h3>
+        <p class="muted">Manage who can see your activity and profile details</p>
+        <button class="quick-btn" onclick="alert('Privacy settings coming soon')">Privacy Options</button>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<style>
+.settings-container {
+  padding: 16px;
+  animation: fadeIn 0.6s ease;
+}
+
+.settings-section {
+  margin-bottom: 24px;
+}
+
+.settings-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+  gap:12px;
+}
+
+.card {
+  background: var(--panel);
+  padding: 14px 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-top:0;
+  margin-bottom:6px;
+  font-size:16px;
+}
+
+.card p {
+  margin:0;
+  font-size:14px;
+  color: var(--muted);
+}
+
+.quick-btn {
+  background: var(--accent);
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.quick-btn:hover {
+  background: #005fcc;
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(8px);}
+  to {opacity:1; transform: translateY(0);}
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  // Theme toggle button
+  const themeBtn = document.getElementById('themeToggleBtn');
+  themeBtn.addEventListener('click', ()=>{
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    if(isDark){
+      document.body.removeAttribute('data-theme');
+      localStorage.setItem('knowvion_theme','light');
+    } else {
+      document.body.setAttribute('data-theme','dark');
+      localStorage.setItem('knowvion_theme','dark');
+    }
+  });
+
+  // Notifications toggle (dummy for now)
+  const notifBtn = document.getElementById('notifToggleBtn');
+  let notifEnabled = true;
+  notifBtn.addEventListener('click', ()=>{
+    notifEnabled = !notifEnabled;
+    notifBtn.textContent = notifEnabled ? 'Disable Notifications' : 'Enable Notifications';
+    alert(`Notifications ${notifEnabled ? 'enabled' : 'disabled'}`);
+  });
+});
+</script>

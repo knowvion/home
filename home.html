@@ -1,0 +1,112 @@
+<div class="home-container">
+
+  <!-- About Us -->
+  <section class="home-section">
+    <h2>📖 Who We Are</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Our Mission</h3>
+        <p>At Knowvion, we aim to provide high-quality educational content and a professional platform for students to explore and grow.</p>
+      </div>
+      <div class="card">
+        <h3>Our Vision</h3>
+        <p>Empowering learners worldwide with interactive, minimalistic, and user-friendly digital education tools.</p>
+      </div>
+      <div class="card">
+        <h3>Our Values</h3>
+        <p>Transparency, consistency, and professionalism in every feature we build.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Common Questions -->
+  <section class="home-section">
+    <h2>❓ Common Questions</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>How do I register?</h3>
+        <p>Click the login button on the dashboard and then select "Register" to create your account.</p>
+      </div>
+      <div class="card">
+        <h3>Can I access courses without login?</h3>
+        <p>No — all content is protected. You must be logged in to access any course or dashboard feature.</p>
+      </div>
+      <div class="card">
+        <h3>How do I reset my password?</h3>
+        <p>Use the "Forgot Password" option on the login page. Instructions will be sent to your registered email.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Support -->
+  <section class="home-section">
+    <h2>📬 Contact & Support</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Email Support</h3>
+        <p>support@knowvion.com — available 24/7 for your queries and troubleshooting.</p>
+      </div>
+      <div class="card">
+        <h3>Feedback</h3>
+        <p>Your feedback helps us improve. Click the feedback form link in the dashboard to share suggestions.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<style>
+.home-container {
+  padding: 16px;
+  animation: fadeIn 0.6s ease;
+}
+
+.home-section {
+  margin-bottom: 24px;
+}
+
+.home-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+  gap: 12px;
+}
+
+.card {
+  background: var(--panel);
+  padding: 14px 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-top:0;
+  margin-bottom:6px;
+  font-size:16px;
+}
+
+.card p {
+  margin:0;
+  font-size:14px;
+  color: var(--muted);
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(8px);}
+  to {opacity:1; transform: translateY(0);}
+}
+</style>

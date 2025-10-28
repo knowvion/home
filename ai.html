@@ -1,0 +1,115 @@
+<div class="ai-container">
+
+  <!-- Page Header -->
+  <section class="ai-section">
+    <h2>🤖 AI Hub</h2>
+    <p class="muted">Explore AI tools, insights, and latest innovations</p>
+
+    <div class="card-grid">
+
+      <!-- AI Tool 1 -->
+      <div class="card">
+        <h3>AI Assistant</h3>
+        <p class="muted">A smart assistant to help with learning, scheduling, and answering queries.</p>
+        <button class="quick-btn" onclick="alert('AI Assistant launching soon')">Open</button>
+      </div>
+
+      <!-- AI Tool 2 -->
+      <div class="card">
+        <h3>AI Code Helper</h3>
+        <p class="muted">Generate code snippets, debug errors, or get coding suggestions instantly.</p>
+        <button class="quick-btn" onclick="alert('AI Code Helper coming soon')">Open</button>
+      </div>
+
+      <!-- AI Tool 3 -->
+      <div class="card">
+        <h3>AI Insights</h3>
+        <p class="muted">Stay updated with latest AI discoveries, research papers, and trends.</p>
+        <button class="quick-btn" onclick="alert('AI Insights launching soon')">Explore</button>
+      </div>
+
+      <!-- AI Tool 4 -->
+      <div class="card">
+        <h3>AI Learning Bot</h3>
+        <p class="muted">Personalized quizzes, flashcards, and practice questions powered by AI.</p>
+        <button class="quick-btn" onclick="alert('AI Learning Bot coming soon')">Try</button>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<style>
+.ai-container {
+  padding:16px;
+  animation: fadeIn 0.6s ease;
+}
+
+.ai-section {
+  margin-bottom:24px;
+}
+
+.ai-section h2 {
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+.ai-section p {
+  margin-bottom:12px;
+  font-size:14px;
+  color: var(--muted);
+}
+
+.card-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:12px;
+}
+
+.card {
+  background: var(--panel);
+  padding:14px 16px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow:0 14px 28px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-top:0;
+  margin-bottom:6px;
+  font-size:16px;
+}
+
+.card p {
+  margin:0;
+  font-size:14px;
+  color: var(--muted);
+}
+
+.quick-btn {
+  margin-top:8px;
+  background: var(--accent);
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.quick-btn:hover {
+  background:#005fcc;
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(8px);}
+  to {opacity:1; transform: translateY(0);}
+}
+</style>
