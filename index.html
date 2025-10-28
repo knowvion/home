@@ -1,123 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Login knowvion</title>
-
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-  }
-
-  body {
-    background-color: #000;
-    color: #fff;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .login-container {
-    background-color: #111;
-    width: 90%;
-    max-width: 360px;
-    padding: 40px 30px;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
-    animation: fadeIn 1s ease forwards;
-  }
-
-  .login-container h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-weight: 500;
-    letter-spacing: 1px;
-  }
-
-  button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.3s;
-  }
-
-  .login-btn {
-    background: #fff;
-    color: #000;
-    border: none;
-    box-shadow: 0 5px 15px rgba(255,255,255,0.2);
-  }
-
-  .login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255,255,255,0.25);
-  }
-
-  .register-btn {
-    background: transparent;
-    color: #fff;
-    border: 1px solid #fff;
-  }
-
-  .register-btn:hover {
-    background: #fff;
-    color: #000;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  .footer {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 12px;
-    opacity: 0.5;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Register</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f7f7; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.2); width: 300px; }
+    input { width: 100%; padding: 10px; margin: 10px 0; }
+    button { width: 100%; padding: 10px; margin: 10px 0; cursor: pointer; }
+  </style>
 </head>
-
 <body>
-  <div class="login-container">
-    <h2>Welcome</h2>
-    <button class="login-btn" id="loginBtn">Login</button>
-    <button class="register-btn" id="registerBtn">Register</button>
-    <div class="footer">© 2025 knowvion</div>
+  <div class="container">
+    <h2>Login / Register</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="registerBtn">Register</button>
+    <button id="loginBtn">Login</button>
+    <p id="message" style="color:red;"></p>
   </div>
 
-  <!-- Include Netlify Identity Widget -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
   <script>
-    // Open Netlify Identity login modal
-    document.getElementById("loginBtn").addEventListener("click", function() {
-      netlifyIdentity.open('login');
+    // Initialize Supabase
+    const supabaseUrl = 'https://rzdigwqgejbowdljuuei.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6ZGlnd3FnZWpib3dkbGp1dWVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2Mjc2MTgsImV4cCI6MjA3NzIwMzYxOH0.WlTlj3Vr4euv7EOzxNCNHB4rqZQeglPO07V9IBnUoJY';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const registerBtn = document.getElementById('registerBtn');
+    const loginBtn = document.getElementById('loginBtn');
+    const message = document.getElementById('message');
+
+    // Redirect logged-in users automatically
+    supabase.auth.getSession().then(({ data }) => {
+      if(data.session) {
+        window.location.href = 'dashboard.html';
+      }
     });
 
-    // Open Netlify Identity signup modal
-    document.getElementById("registerBtn").addEventListener("click", function() {
-      netlifyIdentity.open('signup');
+    // Register new user
+    registerBtn.addEventListener('click', async () => {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if(error) message.textContent = error.message;
+      else message.style.color = 'green', message.textContent = 'Registered! Check email for confirmation.';
     });
 
-    // Redirect user after successful login
-    netlifyIdentity.on('login', user => {
-      window.location.href = '/dashboard.html'; // Redirect after login
+    // Login existing user
+    loginBtn.addEventListener('click', async () => {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if(error) message.textContent = error.message;
+      else window.location.href = 'dashboard.html';
     });
 
-    // Redirect back to login page after logout
-    netlifyIdentity.on('logout', () => {
-      window.location.href = '/';
-    });
   </script>
 </body>
 </html>
-
