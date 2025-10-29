@@ -3,106 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Dashboard</title>
-    
+    <title>Knownvion Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-red: #ef4444;
-            --dark-gray: #1f2937;
-            --medium-gray: #4b5563;
-            --border-color: #e5e7eb;
+            --primary-red: #ef4444; /* A vibrant red */
+            --light-red: #fee2e2; /* A very light red for hover states */
+            --dark-gray: #1f2937; /* Dark gray for text */
+            --medium-gray: #4b5563; /* Medium gray for secondary text */
+            --light-gray: #f9fafb; /* Light gray for background */
+            --border-color: #e5e7eb; /* Light border color */
             --white: #ffffff;
             --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: transparent; /* Allows main dashboard bg to show */
             margin: 0;
-            /* ADD PADDING HERE to match the original image's spacing */
-            padding: 30px; 
+            padding: 0;
+            background-color: var(--light-gray);
+            display: flex;
+            height: 100vh; /* Use height: 100vh */
+            overflow: hidden; /* Prevent body from scrolling */
             color: var(--dark-gray);
         }
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-        .card {
+
+        .sidebar {
+            width: 250px;
             background-color: var(--white);
-            border-radius: 10px;
+            padding: 20px 0;
             box-shadow: var(--shadow);
-            padding: 25px;
             display: flex;
             flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            flex-shrink: 0; /* Prevent sidebar from shrinking */
         }
-        .card-header {
+
+        .sidebar-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            padding: 0 20px 30px 20px;
             border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
-        .card-header .icon {
+
+        .sidebar-header .logo {
             font-size: 24px;
-            margin-right: 15px;
-            color: var(--medium-gray);
+            font-weight: 700;
+            color: var(--primary-red);
+            margin-left: 10px;
         }
-        .card-header h3 {
-            font-size: 18px;
-            font-weight: 600;
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
             margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
             color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            border-radius: 8px;
+            margin: 0 10px;
         }
-        .card-content {
-            flex-grow: 1;
-            color: var(--medium-gray);
-            line-height: 1.6;
+
+        .sidebar-nav a:hover {
+            background-color: var(--light-red);
+            color: var(--primary-red);
         }
-        .card-content h4 {
-            font-size: 16px;
+
+        .sidebar-nav a.active {
+            background-color: var(--light-red);
+            color: var(--primary-red);
             font-weight: 600;
-            margin-bottom: 10px;
+        }
+
+        .sidebar-nav a .icon {
+            margin-right: 15px;
+            font-size: 20px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Prevent main content from scrolling, iframe will scroll */
+        }
+
+        .navbar {
+            background-color: var(--white);
+            padding: 15px 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0; /* Prevent navbar from shrinking */
+        }
+
+        .navbar .title {
+            font-size: 24px;
+            font-weight: 600;
             color: var(--dark-gray);
         }
-        .card-content p {
-            font-size: 14px;
-            margin-bottom: 15px;
+
+        .navbar .icons {
+            display: flex;
+            align-items: center;
         }
-        .card.who-we-are .card-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+
+        .navbar .icon-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--medium-gray);
+            cursor: pointer;
+            margin-left: 20px;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
         }
-        .card.who-we-are .card-content > div {
-            border-right: 1px solid var(--border-color);
-            padding-right: 20px;
+
+        .navbar .icon-btn:hover {
+            background-color: var(--light-gray);
         }
-        .card.who-we-are .card-content > div:last-child {
-            border-right: none;
-            padding-right: 0;
+
+        .dashboard-body {
+            /* **THIS IS THE CHANGE** */
+            padding: 0; /* Removed 30px padding */
+            flex-grow: 1;
+            overflow-y: auto; /* Allow this container to scroll if iframe is too small */
         }
-        .card.common-questions .card-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        
+        #dynamic-content-iframe {
+            border: none;
+            width: 100%;
+            height: 100%; /* Make iframe fill the dashboard-body */
+            display: block; /* Fixes potential small gaps */
         }
-        .card.contact-support .card-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+
     </style>
 </head>
 <body>
-    <div class="card-grid">
-        <div class="card who-we-are">
-            </div>
-        <div class="card common-questions">
-            </div>
-        <div class="card contact-support">
-            </div>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <span class="icon" style="font-size: 30px; color: var(--primary-red);"><i class="fas fa-cube"></i></span>
+            <div class="logo">Knownvion</div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="home.html" class="active" data-page="home"><span class="icon"><i class="fas fa-home"></i></span>Home</a></li>
+                <li><a href="ai-chat.html" data-page="ai-chat"><span class="icon"><i class="fas fa-robot"></i></span>AI chat</a></li>
+                <li><a href="services.html" data-page="services"><span class="icon"><i class="fas fa-cogs"></i></span>Services</a></li>
+                <li><a href="profile.html" data-page="profile"><span class="icon"><i class="fas fa-user"></i></span>Profile</a></li>
+            </ul>
+        </nav>
     </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <div class="title" id="page-title">Dashboard</div>
+            <div class="icons">
+                <button class="icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="icon-btn"><i class="fas fa-user-circle"></i></button>
+            </div>
+        </div>
+
+        <div class="dashboard-body">
+            <iframe id="dynamic-content-iframe" src="home.html"></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            const iframe = document.getElementById('dynamic-content-iframe');
+            const pageTitle = document.getElementById('page-title');
+
+            // Function to load page content and update active link/title
+            function loadPage(pageUrl, title, activeLink) {
+                iframe.src = pageUrl;
+                pageTitle.textContent = title;
+
+                navLinks.forEach(link => link.classList.remove('active'));
+                activeLink.classList.add('active');
+            }
+
+            // Set initial active state and load default page (Dashboard)
+            const initialActiveLink = document.querySelector('.sidebar-nav a[data-page="home"]');
+            if (initialActiveLink) {
+                // Set title to "Dashboard" initially, as seen in the image
+                loadPage(initialActiveLink.getAttribute('href'), 'Dashboard', initialActiveLink); 
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default link behavior
+                    const pageName = link.getAttribute('data-page');
+                    const pageUrl = link.getAttribute('href');
+                    
+                    // Capitalize first letter (e.g., "ai-chat" becomes "Ai-chat")
+                    let title = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+                    
+                    // Special case for "home" page to show "Dashboard" as in the image
+                    if (pageName === 'home') {
+                        title = 'Dashboard';
+                    }
+
+                    loadPage(pageUrl, title, link);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
