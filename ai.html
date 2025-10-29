@@ -1,54 +1,47 @@
-<!-- AINETORG AI Chat Embed -->
-<div id="ainetorg-container" style="position:relative;width:100%;height:100%;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,#0f0f0f,#1a1a1a);display:flex;justify-content:center;align-items:center;flex-direction:column;color:#fff;">
-  <div id="start-screen">
-    <h1 style="font-size:2em;margin-bottom:10px;text-shadow:0 0 15px rgba(255,255,255,0.3);">Welcome to AINETORG AI</h1>
-    <p style="font-size:1.1em;color:rgba(255,255,255,0.7);margin-bottom:30px;">Use ChatGPT-5 for free, no sign-in required</p>
-    <button id="start-button" style="background:#1c1c1c;color:#fff;font-size:1.1em;padding:12px 35px;border:none;border-radius:30px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.5);transition:all .3s ease;">Start Chat</button>
-  </div>
+<div id="ai-section" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;border-radius:20px;background:linear-gradient(135deg,#0f0f0f,#1a1a1a);color:#fff;box-shadow:0 0 20px rgba(0,0,0,0.4);padding:30px;text-align:center;">
+  <h2 style="font-size:2em;margin-bottom:15px;">Welcome to AINETORG AI</h2>
+  <p style="font-size:1.1em;color:rgba(255,255,255,0.7);margin-bottom:25px;">Use ChatGPT-5 for free, no sign-in required</p>
+  <button id="ai-start" style="background:#1c1c1c;color:#fff;font-size:1.1em;padding:12px 35px;border:none;border-radius:30px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.5);transition:all .3s ease;">Start Chat</button>
 
-  <div id="loading-overlay" style="display:none;flex-direction:column;justify-content:center;align-items:center;">
-    <div style="border:5px solid rgba(255,255,255,0.2);border-top:5px solid #fff;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin-bottom:15px;"></div>
+  <div id="ai-loading" style="display:none;flex-direction:column;align-items:center;justify-content:center;margin-top:30px;">
+    <div style="border:5px solid rgba(255,255,255,0.2);border-top:5px solid #fff;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin-bottom:10px;"></div>
     <p>Loading AI...</p>
   </div>
 
-  <div id="chat-box" style="display:none;width:100%;height:100%;border-radius:20px;overflow:hidden;box-shadow:0 10px 20px rgba(0,0,0,0.4);background:#fff;"></div>
+  <div id="chat-box" style="display:none;width:100%;height:600px;max-width:900px;margin-top:20px;border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 10px 20px rgba(0,0,0,0.4);"></div>
 </div>
 
 <script>
-const startBtn = document.getElementById("start-button");
-const startScreen = document.getElementById("start-screen");
-const loadingOverlay = document.getElementById("loading-overlay");
+const aiStart = document.getElementById("ai-start");
+const aiLoading = document.getElementById("ai-loading");
 const chatBox = document.getElementById("chat-box");
 
-startBtn.addEventListener("click", () => {
-  startScreen.style.display = "none";
-  loadingOverlay.style.display = "flex";
+aiStart.addEventListener("click", () => {
+  aiStart.style.display = "none";
+  aiLoading.style.display = "flex";
 
-  // Create Chatling Script (added to <body> for reliability)
+  window.chtlConfig = { chatbotId: "4359393586", display: "fullscreen" };
   const script = document.createElement("script");
   script.src = "https://chatling.ai/js/embed.js";
   script.async = true;
   script.dataset.id = "4359393586";
   script.dataset.display = "fullscreen";
 
-  window.chtlConfig = { chatbotId: "4359393586", display: "fullscreen" };
-
   script.onload = () => {
     const check = setInterval(() => {
       const iframe = document.querySelector("iframe[src*='chatling']");
       if (iframe) {
         clearInterval(check);
-        loadingOverlay.style.display = "none";
+        aiLoading.style.display = "none";
         chatBox.style.display = "block";
         chatBox.appendChild(iframe);
       }
     }, 200);
   };
 
-  document.body.appendChild(script); // ensure script executes globally
+  document.body.appendChild(script);
 });
 
-// simple spinner animation
 const style = document.createElement("style");
 style.innerHTML = `@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}`;
 document.head.appendChild(style);
