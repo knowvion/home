@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Knownvion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #ef4444;
+            --light-red: #fee2e2;
+            --dark-gray: #1f2937;
+            --light-gray: #f9fafb;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--dark-gray);
+        }
+        .auth-container {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            /* Hide by default until auth check is complete */
+            display: none; 
+        }
+        .auth-container h1 {
+            color: var(--primary-red);
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box; 
+        }
+        .auth-btn {
+            background-color: var(--primary-red);
+            color: var(--white);
+            border: none;
+            padding: 14px 20px;
+            width: 100%;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .auth-btn:hover {
+            background-color: #dc2626; /* Darker red */
+        }
+        .error-message {
+            color: var(--primary-red);
+            margin-top: 15px;
+            font-size: 14px;
+            display: none; /* Hide by default */
+        }
+        .toggle-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .toggle-link a {
+            color: var(--primary-red);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hide register form by default */
+        #register-form-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container" id="auth-container">
+        
+        <div id="login-form-container">
+            <h1>Login</h1>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="auth-btn">Login</button>
+                <p class="error-message" id="error-message-login"></p>
+            </form>
+            <p class="toggle-link">
+                Don't have an account? <a id="show-register">Register here</a>
+            </p>
+        </div>
+
+        <div id="register-form-container">
+            <h1>Create Account</h1>
+            <form id="register-form">
+                <div class="input-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-confirm-password">Confirm Password</label>
+                    <input type="password" id="register-confirm-password" required>
+                </div>
+                <button type="submit" class="auth-btn">Register</button>
+                <p class="error-message" id="error-message-register"></p>
+            </form>
+            <p class="toggle-link">
+                Already have an account? <a id="show-login">Login here</a>
+            </p>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        // --- 1. PASTE YOUR FIREBASE CONFIG HERE ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyDG4TCNHLpiQuGLTcKdY3YJ-LGYnL4dCOg",
+    authDomain: "knowvion-4d0fd.firebaseapp.com",
+    projectId: "knowvion-4d0fd",
+    storageBucket: "knowvion-4d0fd.firebasestorage.app",
+    messagingSenderId: "34228041619",
+    appId: "1:34228041619:web:dd307ec645ea9d8b86da66",
+    measurementId: "G-EVG91DW8WG"
+        };
+
+        // --- 2. Initialize Firebase ---
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // --- 3. GET ALL ELEMENTS ---
+        const authContainer = document.getElementById('auth-container');
+        const loginFormContainer = document.getElementById('login-form-container');
+        const registerFormContainer = document.getElementById('register-form-container');
+        
+        const showRegisterLink = document.getElementById('show-register');
+        const showLoginLink = document.getElementById('show-login');
+
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        const errorMessageLogin = document.getElementById('error-message-login');
+        const errorMessageRegister = document.getElementById('error-message-register');
+
+        // --- 4. NEW: AUTH GUARD ---
+        // Checks if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is logged in, redirect to dashboard
+                console.log("User already logged in. Redirecting...");
+                window.location.href = "index.html"; 
+            } else {
+                // User is not logged in, show the login/register forms
+                console.log("No user logged in. Showing auth container.");
+                authContainer.style.display = 'block';
+            }
+        });
+
+        // --- 5. NEW: FORM TOGGLING ---
+        showRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginFormContainer.style.display = 'none';
+            registerFormContainer.style.display = 'block';
+        });
+
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerFormContainer.style.display = 'none';
+            loginFormContainer.style.display = 'block';
+        });
+
+        // --- 6. HANDLE LOGIN ---
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            errorMessageLogin.style.display = 'none'; // Hide error initially
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // This will trigger the onAuthStateChanged listener,
+                    // but we can also redirect manually.
+                    window.location.href = "index.html"; 
+                })
+                .catch((error) => {
+                    errorMessageLogin.textContent = error.message;
+                    errorMessageLogin.style.display = 'block';
+                });
+        });
+
+        // --- 7. NEW: HANDLE REGISTRATION ---
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+
+            errorMessageRegister.style.display = 'none'; // Hide error initially
+
+            // **Password confirmation check**
+            if (password !== confirmPassword) {
+                errorMessageRegister.textContent = "Passwords do not match.";
+                errorMessageRegister.style.display = 'block';
+                return; // Stop the function
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed in! This will also trigger the onAuthStateChanged.
+                    window.location.href = "index.html";
+                })
+                .catch((error) => {
+                    // Handle Errors here (e.g., email-already-in-use)
+                    errorMessageRegister.textContent = error.message;
+                    errorMessageRegister.style.display = 'block';
+                });
+        });
+
+    </script>
+</body>
+</html>
