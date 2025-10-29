@@ -1,138 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AINETORG AI</title>
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-/* Start screen */
-#start-screen {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  z-index: 100;
-  color: #fff;
-}
-#start-screen h1 {
-  font-size: 2.5em;
-  margin-bottom: 10px;
-  text-shadow: 0 0 20px rgba(255,255,255,0.3);
-  animation: glow 2s ease-in-out infinite alternate;
-}
-#start-screen p {
-  font-size: 1.2em;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 40px;
-  letter-spacing: 0.5px;
-}
-#start-button {
-  background-color: #1c1c1c;
-  color: #fff;
-  font-size: 1.3em;
-  padding: 18px 50px;
-  border-radius: 35px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.2) inset;
-  transition: all 0.3s ease, transform 0.2s ease;
-  backdrop-filter: blur(5px);
-}
-#start-button:hover {
-  transform: scale(1.08);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.6), 0 0 30px rgba(255,255,255,0.3) inset;
-}
-@keyframes glow {
-  0% { text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-  50% { text-shadow: 0 0 25px rgba(255,255,255,0.5); }
-  100% { text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-}
-
-/* Loading overlay */
-#loading-overlay {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 90;
-}
-.circle-loader {
-  border: 5px solid rgba(255,255,255,0.2);
-  border-top: 5px solid #fff;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 15px;
-}
-@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-#loading-text { color: #fff; font-size: 1em; }
-
-/* Chat box container */
-#chat-box {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  max-width: 90%;
-  height: 600px;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  border-radius: 25px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-  overflow: hidden;
-  z-index: 50;
-}
-
-/* Force iframe and all child elements to fill the container */
-#chat-box > * {
-  width: 100% !important;
-  height: 100% !important;
-  position: absolute !important;
-  top: 0;
-  left: 0;
-}
-</style>
-</head>
-<body>
-
-<!-- Start Screen -->
-<div id="start-screen">
-  <h1>Welcome to AINETORG AI</h1>
-  <p>Use ChatGPT-5 for free, no sign-in required</p>
-  <button id="start-button">Start Chat</button>
+<!-- AINETORG AI Chat Embed (Dynamic Version) -->
+<div id="start-screen" style="text-align:center;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;background:linear-gradient(135deg,#0f0f0f,#1a1a1a);border-radius:20px;box-shadow:0 0 20px rgba(0,0,0,0.4);padding:30px;">
+  <h1 style="font-size:2em;margin-bottom:10px;text-shadow:0 0 15px rgba(255,255,255,0.3);">Welcome to AINETORG AI</h1>
+  <p style="font-size:1.1em;color:rgba(255,255,255,0.7);margin-bottom:30px;">Use ChatGPT-5 for free, no sign-in required</p>
+  <button id="start-button" style="background:#1c1c1c;color:#fff;font-size:1.2em;padding:15px 40px;border:none;border-radius:30px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.5);transition:all .3s ease;">Start Chat</button>
 </div>
 
-<!-- Loading Overlay -->
-<div id="loading-overlay">
-  <div class="circle-loader"></div>
-  <div id="loading-text">Loading AI...</div>
+<div id="loading-overlay" style="display:none;justify-content:center;align-items:center;flex-direction:column;height:100%;background:#000;border-radius:20px;">
+  <div style="border:5px solid rgba(255,255,255,0.2);border-top:5px solid #fff;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin-bottom:15px;"></div>
+  <p style="color:#fff;">Loading AI...</p>
 </div>
 
-<!-- Chat Widget Box -->
-<div id="chat-box"></div>
+<div id="chat-box" style="display:none;width:100%;height:100%;border-radius:20px;overflow:hidden;box-shadow:0 10px 20px rgba(0,0,0,0.4);background:#fff;"></div>
 
 <script>
 const startButton = document.getElementById('start-button');
@@ -154,7 +32,6 @@ startButton.addEventListener('click', () => {
   script.dataset.display = "fullscreen";
 
   script.onload = () => {
-    // Check if iframe exists inside chat-box
     const interval = setInterval(() => {
       const iframe = chatBox.querySelector('iframe');
       if (iframe) {
@@ -167,7 +44,8 @@ startButton.addEventListener('click', () => {
 
   chatBox.appendChild(script);
 });
-</script>
 
-</body>
-</html>
+const style = document.createElement('style');
+style.innerHTML = `@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}`;
+document.head.appendChild(style);
+</script>
