@@ -155,19 +155,30 @@
   </main>
 
   <script>
-    // Dynamic page loading
     const content = document.getElementById('content');
     const links = document.querySelectorAll('.nav-item');
 
+    // ✅ Updated loadPage() — executes scripts inside loaded pages too
     async function loadPage(url) {
       content.classList.remove('show');
       try {
         const res = await fetch(url);
         if (!res.ok) throw new Error('Page not found');
         const html = await res.text();
+
         setTimeout(() => {
           content.innerHTML = html;
           content.classList.add('show');
+
+          // run embedded scripts
+          const scripts = content.querySelectorAll('script');
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement('script');
+            if (oldScript.src) newScript.src = oldScript.src;
+            else newScript.textContent = oldScript.textContent;
+            document.body.appendChild(newScript);
+            oldScript.remove();
+          });
         }, 200);
       } catch (err) {
         content.innerHTML = `<h2 style='color:#e74c3c'>Error loading ${url}</h2><p>${err.message}</p>`;
@@ -175,7 +186,7 @@
       }
     }
 
-    // Navigation
+    // Sidebar navigation
     links.forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
