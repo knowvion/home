@@ -1,6 +1,6 @@
 <div id="ai-section" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;border-radius:20px;background:linear-gradient(135deg,#0f0f0f,#1a1a1a);color:#fff;box-shadow:0 0 20px rgba(0,0,0,0.4);padding:30px;text-align:center;">
   <h2 style="font-size:2em;margin-bottom:15px;">Welcome to AINETORG AI</h2>
-  <p style="font-size:1.1em;color:rgba(255,255,255,0.7);margin-bottom:25px;">Use ChatGPT-5 for free directly inside your dashboard</p>
+  <p style="font-size:1.1em;color:rgba(255,255,255,0.7);margin-bottom:25px;">Use ChatGPT-5 inside your dashboard (No sign-in needed)</p>
   
   <button id="ai-start" style="background:#1c1c1c;color:#fff;font-size:1.1em;padding:12px 35px;border:none;border-radius:30px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.5);transition:all .3s ease;">Start Chat</button>
 
@@ -21,23 +21,25 @@ aiStart.addEventListener("click", () => {
   aiStart.style.display = "none";
   aiLoading.style.display = "flex";
 
-  // ✅ Embedded Chat Mode (not fullscreen)
-  window.chtlConfig = {
-    chatbotId: "4359393586",
-    display: "embedded",
-    targetElement: "#chat-box"
-  };
-
+  // Load Chatling script dynamically
   const script = document.createElement("script");
   script.src = "https://chatling.ai/js/embed.js";
   script.async = true;
-  script.dataset.id = "4359393586";
-  script.dataset.display = "embedded";
-  script.dataset.target = "#chat-box";
 
   script.onload = () => {
     aiLoading.style.display = "none";
     chatBox.style.display = "block";
+
+    // ✅ Initialize Chatling manually inside chatBox
+    if (window.Chatling) {
+      window.Chatling.init({
+        chatbotId: "4359393586",
+        targetElement: "#chat-box",
+        display: "embedded"
+      });
+    } else {
+      chatBox.innerHTML = "<p style='color:black;padding:20px;text-align:center;'>Failed to load Chatling. Please refresh.</p>";
+    }
   };
 
   document.body.appendChild(script);
