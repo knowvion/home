@@ -248,17 +248,7 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // --- 3. THE AUTH GUARD ---
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // User is logged in!
-                // Show the dashboard content
-                document.body.style.display = 'flex'; 
-            } else {
-                // User is not logged in.
-                // Redirect to the login page
-                window.location.href = 'login.html';
-            }
+      
         });
 
         // --- 4. Your existing dashboard script ---
@@ -316,3 +306,4 @@
 </body>
 
 </html>
+
